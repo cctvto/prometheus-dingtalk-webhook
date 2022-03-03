@@ -33,14 +33,6 @@ func main() {
 		flag.Usage()
 		return
 	}
-	if enableSign {
-		//对url加签名
-		d := ding.Webhook{
-			AccessToken: accessToken,
-			Secret:      secretRobot,
-		}
-		defaultRobot = d.GetURL()
-	}
 
 	//创建路由
 	router := gin.Default()
@@ -57,6 +49,14 @@ func main() {
 			return
 		}
 		//转发到webhook
+		if enableSign {
+			//对url加签名
+			d := ding.Webhook{
+				AccessToken: accessToken,
+				Secret:      secretRobot,
+			}
+			defaultRobot = d.GetURL()
+		}
 		err = notifier.Send(notification, defaultRobot)
 
 		if err != nil {
